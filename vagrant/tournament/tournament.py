@@ -119,17 +119,16 @@ def swissPairings():
         name2: the second player's name
     """
 
-    c = connect()
-    cursor = c.cursor()
-    query = "SELECT * FROM standings"
-    cursor.execute(query)
-    results = cursor.fetchall()
+    standings = playerStandings()
+    num = int(countPlayers())
     pairings = []
-    count = len(results)
-
-    for x in range(0, count - 1, 2):
-        paired_list = (results[x][0], results[x][1], results[x + 1][0], results[x + 1][1])
-        pairings.append(paired_list)
-
-    c.close()
+    if (num > 0):
+        for i in range (num):
+            if (i % 2 == 0):
+                id1 = standings[i][0]
+                name1 = standings[i][1]
+                id2 = standings[i + 1][0]
+                name2 = standings[i + 1][1]
+                pair = (id1, name1, id2, name2)
+                pairings.append(pair)
     return pairings

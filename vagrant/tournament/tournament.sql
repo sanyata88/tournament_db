@@ -1,8 +1,16 @@
 -- Table definitions for the tournament project.
+-- Drop tournament database if it exists
+DROP DATABASE IF EXISTS tournament;
+
 --create a database named 'tournament'
 CREATE DATABASE tournament;
 -- connect to the database
 \connect tournament
+
+-- Drop all tables and views if they exist
+DROP TABLE IF EXISTS player CASCADE;
+DROP tABLE IF EXISTS match CASCADE;
+DROP VIEW IF EXISTS standings CASCADE;
 
 -- create player table
 CREATE TABLE player (
@@ -22,9 +30,9 @@ CREATE TABLE match (
 --create a view of all the tournamnets played
 CREATE VIEW standings AS
 SELECT p.player_id, p.player_name,
-(SELECT count(*) FROM match as m WHERE m.winner = p.player_id as won,
+(SELECT count(*) FROM match WHERE match.winner = p.player_id) as won,
 (SELECT count(*) FROM match WHERE p.player_id in (winner, loser)) as played
-FROM player p
+FROM player as p
 GROUP BY p.player_id
 ORDER BY won DESC;
 -- Put your SQL 'create table' statements in this file; also 'create view'
